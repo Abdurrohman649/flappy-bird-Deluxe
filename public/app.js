@@ -751,10 +751,9 @@ function handleLobbySettingsClick(mx, my) {
 function handleGameClick() {
   const me = multiState.roomState?.players.find(p => p.id === myId);
   if (!me?.spectator && multiState.roomState?.status === 'playing') {
-    // Client-side prediction: обновляем локально сразу
-    if (me.alive) {
-      me.vel = DIFFS[multiState.roomState.settings.diff].jump;
-    }
+    // Client-side prediction: обновляем локально сразу (без проверки alive)
+    me.vel = DIFFS[multiState.roomState.settings.diff].jump;
+    me.rot = Math.max(-30, me.vel * 4);
     // Отправляем на сервер для синхронизации
     socket.emit('player:flap');
     playSound('wing', 0.2);
@@ -1055,6 +1054,16 @@ function loop() {
       drawLobbySettingsScreen();
       break;
     case 'game':
+      // Client-side physics update для текущего игрока (как в одиночном режиме)
+      if (multiState.roomState?.status === 'playing') {
+        const me = multiState.roomState?.players?.find(p => p.id === myId);
+        if (me && !me.spectator) {
+          const P = DIFFS[multiState.roomState.settings.diff];
+          me.vel += P.gravity;
+          me.y += me.vel;
+          me.rot = me.vel < 0 ? Math.max(-30, me.vel * 4) : Math.min(90, (me.rot || 0) + 3);
+        }
+      }
       drawGameMultiplayer();
       break;
     case 'results':

@@ -311,13 +311,30 @@ function updateBots(room) {
 
     const nextPipe = room.pipes.find(pipe => pipe.x + pipe.w > p.x - 2);
     const params = DIFFS[room.settings.diff];
+    
+    // Сложность влияет на время реакции бота
+    let reactionDistance = 85;
+    let safeGapBorder = 8;
+    
+    if (room.settings.diff === 'easy') {
+      reactionDistance = 120;  // Больше времени на реакцию в легком режиме
+      safeGapBorder = 15;      // Менее точная навигация
+    } else if (room.settings.diff === 'normal') {
+      reactionDistance = 95;
+      safeGapBorder = 10;
+    } else if (room.settings.diff === 'hard') {
+      reactionDistance = 75;   // Меньше времени в сложном режиме
+      safeGapBorder = 5;       // Более точная навигация требуется
+    }
 
     if (nextPipe) {
       const gapCenter = nextPipe.topH + params.gap / 2;
       const center = p.y + p.h / 2;
       const dx = nextPipe.x - p.x;
-      if (dx < 85 && center > gapCenter + 8) p.vel = params.jump;
-      if (center > gapCenter + 20) p.vel = params.jump;
+      
+      // Условия срабатывают по-разному для разных сложностей
+      if (dx < reactionDistance && center > gapCenter + safeGapBorder) p.vel = params.jump;
+      if (center > gapCenter + (safeGapBorder * 3)) p.vel = params.jump;
       if (p.y > GROUND_Y - 70) p.vel = params.jump;
     } else {
       if (p.y > H / 2 + 20) p.vel = params.jump;
