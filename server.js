@@ -289,8 +289,7 @@ function rectHit(a, b) {
   return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 }
 function playerBounds(p) {
-  // Уменьшаем границы на 4px со всех сторон для более мягкой коллизии
-  return { x: p.x + 4, y: p.y + 4, w: p.w - 8, h: p.h - 8 };
+  return { x: p.x + 3, y: p.y + 3, w: p.w - 6, h: p.h - 6 };
 }
 function spawnPipe(room) {
   const gap = DIFFS[room.settings.diff].gap;

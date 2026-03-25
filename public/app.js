@@ -750,19 +750,9 @@ function handleLobbySettingsClick(mx, my) {
 
 function handleGameClick() {
   const me = multiState.roomState?.players.find(p => p.id === myId);
-  const isReadyToFlap = !me?.spectator && multiState.roomState?.status === 'playing' && me?.alive;
-  
-  if (isReadyToFlap) {
+  if (!me?.spectator && multiState.roomState?.status === 'playing') {
     socket.emit('player:flap');
     playSound('wing', 0.2);
-  } else {
-    console.log('Cannot flap. Reasons:', {
-      meFound: !!me,
-      isSpectator: me?.spectator,
-      gameStatus: multiState.roomState?.status,
-      isAlive: me?.alive,
-      myId
-    });
   }
 }
 
@@ -898,14 +888,12 @@ document.addEventListener('keydown', (e) => {
 
   if (screen === 'single-play' && ['Space', 'ArrowUp', 'KeyW', 'Enter'].includes(e.code)) {
     e.preventDefault();
-    console.log('Single-play space/flap pressed');
     handleSinglePlayClick();
     return;
   }
 
   if (screen === 'game' && ['Space', 'ArrowUp', 'KeyW', 'Enter'].includes(e.code)) {
     e.preventDefault();
-    console.log('Multiplayer space/flap pressed', { screen, myId, roomState: !!multiState.roomState });
     handleGameClick();
     return;
   }
