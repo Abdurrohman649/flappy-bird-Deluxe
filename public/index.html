@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+  />
+
+  <title>Flappy Bird Deluxe</title>
+  <meta name="description" content="Flappy Bird Deluxe — одиночный режим и мультиплеер" />
+  <meta name="theme-color" content="#14263a" />
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+
+  <!-- preload основных изображений -->
+  <link rel="preload" as="image" href="/sprites/background-day.png" />
+  <link rel="preload" as="image" href="/sprites/background-night.png" />
+  <link rel="preload" as="image" href="/sprites/base.png" />
+  <link rel="preload" as="image" href="/sprites/yellowbird-midflap.png" />
+  <link rel="preload" as="image" href="/sprites/bluebird-midflap.png" />
+  <link rel="preload" as="image" href="/sprites/redbird-midflap.png" />
+
+  <!-- preload главных звуков -->
+  <link rel="preload" as="audio" href="/audio/wing.ogg" />
+  <link rel="preload" as="audio" href="/audio/point.ogg" />
+  <link rel="preload" as="audio" href="/audio/hit.ogg" />
+</head>
+<body>
+  <canvas id="c" aria-label="Flappy Bird Deluxe"></canvas>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
