@@ -1,4 +1,4 @@
-import { W, H, GROUND_Y, STORAGE_KEYS } from './config.js';
+import { W, H, GROUND_Y, STORAGE_KEYS, DIFFS } from './config.js';
 import {
   loadAssets,
   getLoadingProgress,
@@ -751,6 +751,11 @@ function handleLobbySettingsClick(mx, my) {
 function handleGameClick() {
   const me = multiState.roomState?.players.find(p => p.id === myId);
   if (!me?.spectator && multiState.roomState?.status === 'playing') {
+    // Client-side prediction: обновляем локально сразу
+    if (me.alive) {
+      me.vel = DIFFS[multiState.roomState.settings.diff].jump;
+    }
+    // Отправляем на сервер для синхронизации
     socket.emit('player:flap');
     playSound('wing', 0.2);
   }
