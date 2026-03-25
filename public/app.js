@@ -888,13 +888,22 @@ document.addEventListener('keydown', (e) => {
 
   if (screen === 'single-play' && ['Space', 'ArrowUp', 'KeyW', 'Enter'].includes(e.code)) {
     e.preventDefault();
-    handleSinglePlayClick();
+    if (singleState.game.state === 'play') {
+      handleSinglePlayClick();
+    } else {
+      console.warn('Space pressed, but game is not in play state.');
+    }
     return;
   }
 
   if (screen === 'game' && ['Space', 'ArrowUp', 'KeyW', 'Enter'].includes(e.code)) {
     e.preventDefault();
-    handleGameClick();
+    const me = multiState.roomState?.players.find(p => p.id === myId);
+    if (multiState.roomState?.status === 'playing' && me && !me.spectator) {
+      handleGameClick();
+    } else {
+      console.warn('Space pressed, but game is not in a valid state for action.');
+    }
     return;
   }
 
